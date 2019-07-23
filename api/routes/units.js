@@ -95,6 +95,33 @@ router.post('/:id/company/employees', async (req, res, next) => {
   }
 })
 
+// PATCH /api/v1/units/[id]/company/employees/[id]
+router.patch('/:id/company/employees/:employeeId', async (req, res, next) => {
+  status = 200
+  try {
+    const unit = await Units.findById(req.params.id)
+    if (unit.company === undefined) {
+      const e = new Error(`Unit does not have a company listed`)
+      e.status = 404
+      return next(e)
+    }
+    const employee = unit.company.employees.id(req.params.employeeId)
+    if (employee === null) {
+      const e = new Error(`Employee does not exist`)
+      e.status = 404
+      return next(e)
+    }
+    Object.assign(employee, req.body)
+    await unit.save()
+
+    res.status(status).json({ status, employee })
+  } catch (error) {
+    const e = new Error(`Unit with ID ${req.params.id} not found`)
+    e.status = 404
+    next(e)
+  }
+})
+
 
 // PATCH /api/v1/units/[id]/company
 router.patch('/:id/company', async (req, res, next) => {
