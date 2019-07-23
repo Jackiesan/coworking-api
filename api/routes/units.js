@@ -161,6 +161,34 @@ router.patch('/:id', async (req, res, next) => {
   }
 })
 
+// DELETE /api/v1/units/[id]/company/employees/[id]
+router.delete('/:id/company/employees/:employeeId', async (req, res, next) => {
+  status = 200
+  try {
+    const unit = await Units.findById(req.params.id)
+    if (unit.company === undefined) {
+      const e = new Error(`Unit does not have a company listed`)
+      e.status = 404
+      return next(e)
+    }
+    const employee = unit.company.employees.id(req.params.employeeId)
+    if (employee === null) {
+      const e = new Error(`Employee does not exist`)
+      e.status = 404
+      return next(e)
+    }
+    employee.remove()
+    await unit.save()
+
+    res.status(status).json({ status, employee })
+  } catch (error) {
+    const e = new Error(`Unit with ID ${req.params.id} not found`)
+    e.status = 404
+    next(e)
+  }
+})
+
+
 // DELETE http://localhost:5000/api/v1/units/5/company
 
 router.delete('/:id/company', async (req, res, next) => {
