@@ -1,5 +1,6 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const companySchema =  require('./company')
 
 var schema = new Schema({
   kind: {
@@ -11,33 +12,7 @@ var schema = new Schema({
     required: true
   },
   special_monthly_offer: Number,
-  company: {
-    name: {
-      type: String,
-      required: true
-    },
-    contact_email: {
-      type: String,
-      required: true
-    },
-    employees: [{
-      first_name: {
-        type: String,
-        required: true
-      },
-      last_name: {
-        type: String,
-        required: true
-      },
-      preferred_name: String,
-      position: String,
-      birthday: String,
-      email: {
-        type: String,
-        required: true
-      }
-    }]
-  }
+  company: companySchema
 })
 
 module.exports = mongoose.model('Units', schema)

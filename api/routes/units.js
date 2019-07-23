@@ -23,4 +23,22 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+// PATCH /api/v1/units/[id]
+router.patch('/:id', async (req, res, next) => {
+  const status = 200
+  const unit = await Units.findById(req.params.id)
+
+  for(let attribute in req.body) {
+    unit[attribute] = req.body[attribute]
+  }
+  await unit.save()
+
+  res.status(status).json({ status, unit })
+})
+
+
+// PATCH /api/v1/units/[id]/company
+
+
+
 module.exports = router
