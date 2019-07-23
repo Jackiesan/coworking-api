@@ -12,16 +12,47 @@ router.get('/', async (req, res, next) => {
   res.json({ status, response })
 })
 
+// GET /api/v1/units/[id]/company/employees/[id]
+router.get('/:id/company/employees/:employeeId', async (req, res, next) => {
+  status = 200
+  try {
+    const unit = await Units.findById(req.params.id)
+    if (unit.company === undefined) {
+      const e = new Error(`Unit does not have a company listed`)
+      e.status = 404
+      return next(e)
+    }
+    const employees = unit.company.employees
+    const employee = employees.find(employee => employee['_id'] == req.params.employeeId)
+    if (employee === undefined) {
+      const e = new Error(`Employee does not exist`)
+      e.status = 404
+      return next(e)
+    }
+
+    res.status(status).json({ status, employee })
+  } catch (error) {
+    const e = new Error(`Unit with ID ${req.params.id} not found`)
+    e.status = 404
+    next(e)
+  }
+})
+
 // GET /api/v1/units/[id]/company/employees
 router.get('/:id/company/employees', async (req, res, next) => {
   status = 200
   try {
     const unit = await Units.findById(req.params.id)
+    if (unit.company === undefined) {
+      const e = new Error(`Unit does not have a company listed`)
+      e.status = 404
+      return next(e)
+    }
     const employees = unit.company.employees
     res.status(status).json({ status, employees })
   } catch (error) {
     const e = new Error(`Unit with ID ${req.params.id} not found`)
-    e.status = 400
+    e.status = 404
     next(e)
   }
 })
