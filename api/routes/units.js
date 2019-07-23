@@ -57,6 +57,7 @@ router.get('/:id/company/employees', async (req, res, next) => {
   }
 })
 
+// POST /api/v1/units/
 router.post('/', async (req, res, next) => {
   const status = 201
 
@@ -71,6 +72,29 @@ router.post('/', async (req, res, next) => {
     next(e)
   }
 })
+
+// POST /api/v1/units/[id]/company/employees
+router.post('/:id/company/employees', async (req, res, next) => {
+  status = 200
+  try {
+    const unit = await Units.findById(req.params.id)
+    if (unit.company === undefined) {
+      const e = new Error(`Unit does not have a company listed`)
+      e.status = 404
+      return next(e)
+    }
+    const employees = unit.company.employees
+    const employee = req.body
+    employees.push(req.body)
+    await unit.save()
+    res.status(status).json({ status, employee })
+  } catch (error) {
+    const e = new Error(`Unit with ID ${req.params.id} not found`)
+    e.status = 404
+    next(e)
+  }
+})
+
 
 // PATCH /api/v1/units/[id]/company
 router.patch('/:id/company', async (req, res, next) => {
