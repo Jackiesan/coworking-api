@@ -1,6 +1,6 @@
 # Full Stack Coworking
 
-You will be building a full-stack API with the following resources based off of a coworking space. In addition to the specified fields, you should include the `_id`, `created_at`, and `updated_at` fields.
+This is an API for a coworking space. There are three main documents in this collection: Unit, Company, Employee. Below are the fields that are available to each document.
 
 - **Unit:** The **Unit** resource is a generic term for a rentable space.
   - **kind:** (Required) The kind of unit available. _Only_ the following options should be allowed: "seat", "desk", "small office", "large office", "floor".
@@ -19,7 +19,7 @@ You will be building a full-stack API with the following resources based off of 
   - **birthday:** The employee's date of birth.
   - **email:** (Required) An email address to contact the given employee. This should be [validated](https://mongoosejs.com/docs/validation.html) so that only a valid email can be entered.
 
-Your API should include the following routes with the specified functionality.
+API includes the following routes with the specified functionality.
 
 - [ ] [GET /api/v1/units](#GET-apiv1units)
 - [ ] [GET /api/v1/units?kind=[kind]](#GET-apiv1unitskindkind)
@@ -44,7 +44,6 @@ Your API should include the following routes with the specified functionality.
 - [ ] [GET /api/v1/employees?name=[partial-query]](#GET-apiv1employeesnamepartial-query)
 - [ ] [GET /api/v1/employees?birthday=[date]](#GET-apiv1employeesbirthdaydate)
 
-**NOTE: Exclude the `_v` field from each document.**
 
 ### GET /api/v1/units
 
