@@ -41,25 +41,6 @@ router.get('/', async (req, res, next) => {
     }
     res.json({ status, companies_gte })
   }
-
-  // TODO: Finish two routes
-  // GET /api/v1/employees?name=[partial-query]
-  // if (req.query.name) {
-  //   const employeesNameMatch = []
-  //   for(let i=0; i < companies.length; i++) {
-  //     const employees = companies[i]['employees']
-  //     for(let i=0; i < employees.length; i++) {
-  //       const fullName = employees[i]['first_name'] + " " + employees[i]['last_name']
-  //       console.log(fullName.match(req.query.name))
-
-  //     }
-  //   }
-  //   res.json({ status, companies })
-  // }
-
-  // GET /api/v1/employees?birthday=[date]
-
-
   res.json({ status, companies })
 })
 
