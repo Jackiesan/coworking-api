@@ -8,8 +8,35 @@ var mongoose = require('mongoose');
 // TODO: GET /api/v1/units?occupied=[true/false]
 router.get('/', async (req, res, next) => {
   status = 200
-  const response = await Units.find(({...req.query}))
-  res.json({ status, response })
+  try {
+    const units = await Units.find().select('-__v')
+    if (req.query.occupied === 'true') {
+      const occupied_units = []
+      for(let i=0; i < units.length; i++) {
+        if (units[i].company) {
+          occupied_units.push(units[i])
+        }
+      }
+      res.json({ status, occupied_units })
+    }
+
+    if (req.query.occupied === 'false') {
+      const unoccupied_units = []
+      for(let i=0; i < units.length; i++) {
+        if (!units[i].company) {
+          unoccupied_units.push(units[i])
+        }
+      }
+      res.json({ status, unoccupied_units })
+    }
+
+    const response = await Units.find(({...req.query})).select('-__v')
+    res.json({ status, response })
+  } catch (error) {
+    const e = new Error(`Something went wrong`)
+    e.status = 400
+    next(e)
+  }
 })
 
 // GET /api/v1/units/[id]/company/employees/[id]

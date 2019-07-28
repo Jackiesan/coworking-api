@@ -5,7 +5,8 @@ const companySchema =  require('./company')
 var schema = new Schema({
   kind: {
     type: String,
-    required: true
+    required: true,
+    enum: ["seat", "desk", "small office", "large office", "floor"]
   },
   floor: {
     type: Number,

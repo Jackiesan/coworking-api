@@ -1,4 +1,8 @@
 const mongoose = require('mongoose')
+const validateEmail = function(email) {
+  const validEmail = /^\S+@\S+\.\S+$/
+  return validEmail.test(email)
+};
 
 const schema = new mongoose.Schema({
   name: {
@@ -7,7 +11,8 @@ const schema = new mongoose.Schema({
   },
   contact_email: {
     type: String,
-    required: true
+    required: true,
+    validate: [validateEmail, 'Email address is not valid']
   },
   employees: [{
     first_name: {
@@ -23,7 +28,8 @@ const schema = new mongoose.Schema({
     birthday: String,
     email: {
       type: String,
-      required: true
+      required: true,
+      validate: [validateEmail, 'Email address is not valid']
     }
   }]
 })
