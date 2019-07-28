@@ -14,6 +14,9 @@ var schema = new Schema({
   },
   special_monthly_offer: Number,
   company: companySchema
+},
+{
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
 
 module.exports = mongoose.model('Units', schema)
