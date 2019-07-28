@@ -6,32 +6,45 @@ router.get('/', async (req, res, next) => {
   status = 200
 
   try {
-  // Get all companies first
-  const companies = []
-  const units = await Units.find()
-  for(let i=0; i < units.length; i++) {
-    if (units[i]['company'] !== undefined && units[i]['company'] !== null) {
-      companies.push(units[i]['company'])
-    }
-  }
-
-  // GET /api/v1/employees?name=[partial-query]
-  if (req.query.name) {
-    const employeesNameMatch = []
-    for(let i=0; i < companies.length; i++) {
-      const employees = companies[i]['employees']
-      for(let k=0; k < employees.length; k++) {
-        const fullName = (employees[k]['first_name'] + " " + employees[k]['last_name'])
-        const regex = new RegExp(req.query.name, "gi")
-        if (fullName.match(regex)) {
-          employeesNameMatch.push(fullName)
-        }
+    // Get all companies first
+    const companies = []
+    const units = await Units.find()
+    for(let i=0; i < units.length; i++) {
+      if (units[i]['company'] !== undefined && units[i]['company'] !== null) {
+        companies.push(units[i]['company'])
       }
     }
-    res.json({ status, employeesNameMatch })
-  }
 
-  // GET /api/v1/employees?birthday=[date]
+    // GET /api/v1/employees?name=[partial-query]
+    if (req.query.name) {
+      const employees = []
+      for(let i=0; i < companies.length; i++) {
+        const allEmployees = companies[i]['employees']
+        for(let k=0; k < allEmployees.length; k++) {
+          const fullName = (allEmployees[k]['first_name'] + " " + allEmployees[k]['last_name'])
+          const regex = new RegExp(req.query.name, "gi")
+          if (fullName.match(regex)) {
+            employees.push(fullName)
+          }
+        }
+      }
+      res.json({ status, employees })
+    }
+
+    // GET /api/v1/employees?birthday=[date]
+    if (req.query.birthday) {
+      const employees = []
+      for(let i=0; i < companies.length; i++) {
+        const allEmployees = companies[i]['employees']
+        for(let k=0; k < allEmployees.length; k++) {
+          if (allEmployees[k]['birthday'] === req.query.birthday) {
+            const fullName = (allEmployees[k]['first_name'] + " " + allEmployees[k]['last_name'])
+            employees.push(fullName)
+          }
+        }
+      }
+      res.json({ status, employees })
+    }
 
   } catch (error) {
     const e = new Error(`Something went wrong`)
